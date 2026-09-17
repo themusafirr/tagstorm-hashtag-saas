@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TagStorm AI — AI Hashtag Generator for Instagram & YouTube</title>
+    <meta name="description" content="Generate 30 powerful, trending hashtags for Instagram & YouTube in seconds. AI-powered hashtag suggestions for creators, influencers, and brands.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg-0: #07070f;
+            --bg-1: #0d0d1a;
+            --bg-2: #12121f;
+            --bg-card: #16162a;
+            --bg-card-hover: #1c1c35;
+            --border: #2a2a4a;
+            --border-bright: #3d3d6b;
+            --indigo: #6366f1;
+            --indigo-bright: #818cf8;
+            --indigo-light: #a5b4fc;
+            --purple: #8b5cf6;
+            --purple-bright: #a78bfa;
+            --pink: #ec4899;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+            --success: #10b981;
+            --success-bg: rgba(16,185,129,0.1);
+            --danger: #ef4444;
+            --glow-indigo: 0 0 40px rgba(99,102,241,0.15);
+            --glow-purple: 0 0 40px rgba(139,92,246,0.15);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg-0);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Background grid effect */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Radial glow */
+        body::after {
+            content: '';
+            position: fixed;
+            top: -20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 60%;
+            background: radial-gradient(ellipse, rgba(99,102,241,0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ── Header ─────────────────────────────────────────────────────── */
+        header {
+            padding: 28px 0 0;
+            text-align: center;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--indigo), var(--purple));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: var(--glow-indigo);
+        }
+
+        .logo-text {
+            font-size: 26px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--indigo-light), var(--purple-bright));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .tagline {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 32px;
+            font-weight: 400;
+        }
+
+        .badges {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 36px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 4px 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 6px var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* ── Main Card ─────────────────────────────────────────────────── */
+        .main-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 36px;
+            margin-bottom: 24px;
+            box-shadow: var(--glow-indigo);
+        }
+
+        .input-section { margin-bottom: 24px; }
+
+        .input-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 10px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .niche-input {
+            width: 100%;
+            background: var(--bg-2);
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            padding: 16px 20px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .niche-input::placeholder { color: var(--text-dim); }
+
+        .niche-input:focus {
+            border-color: var(--indigo);
+            box-shadow: 0 0 0 4px rgba(99,102,241,0.15);
+        }
+
+        .input-hint {
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--text-dim);
+        }
+
+        .input-hint span {
+            color: var(--indigo-light);
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .input-hint span:hover { text-decoration: underline; }
+
+        .generate-btn {
+            width: 100%;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, var(--indigo), var(--purple));
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            color: #fff;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 16px;
+            box-shadow: 0 4px 20px rgba(99,102,241,0.3);
+            letter-spacing: 0.02em;
+        }
+
+        .generate-btn:hover:not(:disabled) {
+            opacity: 0.92;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 30px rgba(99,102,241,0.4);
+        }
+
+        .generate-btn:active:not(:disabled) { transform: translateY(0); }
+
+        .generate-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .generate-btn .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            display: none;
+        }
+
+        .generate-btn.loading .spinner { display: block; }
+        .generate-btn.loading .btn-text { display: none; }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Results ──────────────────────────────────────────────────── */
+        #results { display: none; }
+
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .results-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .results-title .count-badge {
+            background: linear-gradient(135deg, var(--indigo), var(--purple));
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 100px;
+        }
+
+        .copy-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--success-bg);
+            border: 1px solid rgba(16,185,129,0.3);
+            border-radius: 10px;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            color: var(--success);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover { background: rgba(16,185,129,0.2); }
+        .copy-btn.copied {
+            background: rgba(16,185,129,0.3);
+            color: var(--success);
+        }
+
+        .hashtags-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .hashtag {
+            display: inline-flex;
+            align-items: center;
+            background: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 13px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--indigo-light);
+            font-weight: 500;
+            transition: all 0.15s;
+            cursor: default;
+            user-select: all;
+        }
+
+        .hashtag:hover {
+            border-color: var(--indigo);
+            background: rgba(99,102,241,0.08);
+            color: var(--text);
+            transform: translateY(-1px);
+        }
+
+        .hashtag .hash {
+            color: var(--purple-bright);
+            margin-right: 2px;
+            font-weight: 700;
+        }
+
+        .platform-info {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .platform-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .platform-pill strong {
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        /* ── Stats Bar ─────────────────────────────────────────────────── */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--indigo-light), var(--purple-bright));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-dim);
+            font-weight: 500;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        /* ── Error ─────────────────────────────────────────────────────── */
+        .error-msg {
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.3);
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 14px;
+            color: var(--danger);
+            margin-top: 12px;
+            display: none;
+        }
+
+        /* ── Pricing CTA ───────────────────────────────────────────────── */
+        .pricing-cta {
+            background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.08));
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .pricing-cta h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, var(--indigo-light), var(--purple-bright));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pricing-cta p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .pricing-plans {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .plan-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px 16px;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+
+        .plan-card.featured {
+            border-color: var(--indigo);
+            background: rgba(99,102,241,0.05);
+        }
+
+        .plan-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--indigo-light);
+            margin-bottom: 6px;
+        }
+
+        .plan-price {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .plan-period {
+            font-size: 12px;
+            color: var(--text-dim);
+            font-weight: 400;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-top: 12px;
+            text-align: left;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .plan-features li {
+            padding: 3px 0;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .plan-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-size: 11px;
+        }
+
+        .upgrade-btn {
+            margin-top: 14px;
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, var(--indigo), var(--purple));
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            color: #fff;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.15s;
+        }
+
+        .upgrade-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        /* ── Footer ────────────────────────────────────────────────────── */
+        footer {
+            text-align: center;
+            padding: 16px 0 28px;
+            font-size: 12px;
+            color: var(--text-dim);
+            border-top: 1px solid var(--border);
+            margin-top: 8px;
+        }
+
+        footer a {
+            color: var(--indigo-light);
+            text-decoration: none;
+        }
+
+        footer a:hover { text-decoration: underline; }
+
+        /* ── Toast ─────────────────────────────────────────────────────── */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: var(--bg-card);
+            border: 1px solid var(--success);
+            color: var(--success);
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        /* ── Responsive ───────────────────────────────────────────────── */
+        @media (max-width: 600px) {
+            .container { padding: 0 16px; }
+            .main-card { padding: 24px 20px; }
+            .stats-bar { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+            .stat-card { padding: 14px 10px; }
+            .stat-number { font-size: 22px; }
+            .pricing-plans { grid-template-columns: 1fr; }
+            .logo-text { font-size: 22px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <div class="logo-icon">#</div>
+                <span class="logo-text">TagStorm AI</span>
+            </div>
+            <p class="tagline">AI-powered hashtag generator for Instagram &amp; YouTube creators</p>
+            <div class="badges">
+                <span class="badge"><span class="badge-dot"></span> Free to try</span>
+                <span class="badge">⚡ 30 hashtags instantly</span>
+                <span class="badge">📊 Instagram + YouTube ready</span>
+            </div>
+        </header>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-number" id="stat-views">—</div>
+                <div class="stat-label">Total Views</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="stat-generations">—</div>
+                <div class="stat-label">Hashtags Generated</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">30</div>
+                <div class="stat-label">Hashtags / Click</div>
+            </div>
+        </div>
+
+        <!-- Main Card -->
+        <div class="main-card">
+            <div class="input-section">
+                <label class="input-label" for="niche-input">Enter your niche or topic</label>
+                <div class="input-wrapper">
+                    <input
+                        type="text"
+                        id="niche-input"
+                        class="niche-input"
+                        placeholder="e.g. fitness, travel photography, vegan cooking..."
+                        autocomplete="off"
+                        spellcheck="false"
+                        maxlength="100"
+                    >
+                </div>
+                <p class="input-hint">
+                    Try:
+                    <span onclick="fillNiche('fitness')">fitness</span> ·
+                    <span onclick="fillNiche('food')">food</span> ·
+                    <span onclick="fillNiche('travel')">travel</span> ·
+                    <span onclick="fillNiche('fashion')">fashion</span> ·
+                    <span onclick="fillNiche('gaming')">gaming</span> ·
+                    <span onclick="fillNiche('photography')">photography</span>
+                </p>
+            </div>
+
+            <div id="error-msg" class="error-msg"></div>
+
+            <button class="generate-btn" id="generate-btn" onclick="generateHashtags()">
+                <span class="spinner"></span>
+                <span class="btn-text">⚡ Generate 30 Hashtags</span>
+            </button>
+
+            <!-- Results -->
+            <div id="results">
+                <div class="results-header" style="margin-top: 24px;">
+                    <div class="results-title">
+                        🎯 Your Hashtags
+                        <span class="count-badge" id="result-count">30</span>
+                        <span id="result-niche" style="color: var(--text-dim); font-weight: 400; font-size: 12px;"></span>
+                    </div>
+                    <button class="copy-btn" id="copy-btn" onclick="copyHashtags()">
+                        <span id="copy-icon">📋</span>
+                        <span id="copy-text">Copy All</span>
+                    </button>
+                </div>
+                <div class="hashtags-grid" id="hashtags-grid"></div>
+                <div class="platform-info">
+                    <div class="platform-pill">
+                        📸 <strong>Instagram</strong> — paste in your caption or first comment
+                    </div>
+                    <div class="platform-pill">
+                        ▶️ <strong>YouTube</strong> — add to description or video tags
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pricing CTA -->
+        <div class="pricing-cta">
+            <h3>🚀 Unlock Unlimited Generations</h3>
+            <p>Upgrade for priority access, analytics, and bulk generation</p>
+            <div class="pricing-plans">
+                <div class="plan-card">
+                    <div class="plan-label">Monthly</div>
+                    <div class="plan-price">₹199<span class="plan-period">/mo</span></div>
+                    <ul class="plan-features">
+                        <li>Unlimited generations</li>
+                        <li>Priority support</li>
+                        <li>Analytics dashboard</li>
+                        <li>Bulk export (CSV)</li>
+                    </ul>
+                    <button class="upgrade-btn" onclick="handleUpgrade('monthly')">Upgrade Now</button>
+                </div>
+                <div class="plan-card featured">
+                    <div class="plan-label">Yearly</div>
+                    <div class="plan-price">₹999<span class="plan-period">/yr</span></div>
+                    <div style="font-size: 11px; color: var(--success); margin-top: 2px; font-weight: 600;">Save 58%</div>
+                    <ul class="plan-features">
+                        <li>Everything in Monthly</li>
+                        <li>2 months free</li>
+                        <li>API access</li>
+                        <li>Custom hashtag sets</li>
+                    </ul>
+                    <button class="upgrade-btn" onclick="handleUpgrade('yearly')">Upgrade Now</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2026 TagStorm AI · <a href="/sales">Pricing & Sales</a> · Built for creators</p>
+        </footer>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span>✅</span>
+        <span id="toast-msg">Copied to clipboard!</span>
+    </div>
+
+    <script>
+        // ── State ─────────────────────────────────────────────────────────────
+        let lastHashtags = [];
+
+        // ── Init ───────────────────────────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', () => {
+            trackView();
+            loadStats();
+
+            // Enter key triggers generation
+            document.getElementById('niche-input').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') generateHashtags();
+            });
+        });
+
+        // ── Track view ─────────────────────────────────────────────────────────
+        async function trackView() {
+            try {
+                await fetch('/api/track-view', { method: 'POST', keepalive: true });
+            } catch (_) {}
+        }
+
+        // ── Load analytics ──────────────────────────────────────────────────────
+        async function loadStats() {
+            try {
+                const res = await fetch('/api/analytics');
+                const data = await res.json();
+                animateStat('stat-views', data.views || 0);
+                animateStat('stat-generations', data.generations || 0);
+            } catch (_) {
+                document.getElementById('stat-views').textContent = '—';
+                document.getElementById('stat-generations').textContent = '—';
+            }
+        }
+
+        function animateStat(id, target) {
+            const el = document.getElementById(id);
+            const duration = 800;
+            const start = performance.now();
+            const from = 0;
+
+            function update(now) {
+                const elapsed = now - start;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                el.textContent = Math.round(from + (target - from) * eased).toLocaleString();
+                if (progress < 1) requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+        }
+
+        // ── Generate ───────────────────────────────────────────────────────────
+        async function generateHashtags() {
+            const input = document.getElementById('niche-input');
+            const btn = document.getElementById('generate-btn');
+            const errorEl = document.getElementById('error-msg');
+            const niche = input.value.trim();
+
+            errorEl.style.display = 'none';
+            errorEl.textContent = '';
+
+            if (!niche) {
+                showError('Please enter a niche or topic first!');
+                input.focus();
+                return;
+            }
+
+            btn.disabled = true;
+            btn.classList.add('loading');
+
+            try {
+                const res = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ niche })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    showError(data.error || 'Something went wrong. Please try again.');
+                    return;
+                }
+
+                lastHashtags = data.hashtags;
+                displayHashtags(data.hashtags, data.niche);
+                document.getElementById('result-niche').textContent = `— "${data.niche}"`;
+
+                // Refresh stats
+                loadStats();
+
+                // Scroll to results
+                setTimeout(() => {
+                    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+
+            } catch (err) {
+                showError('Network error. Please check your connection and try again.');
+            } finally {
+                btn.disabled = false;
+                btn.classList.remove('loading');
+            }
+        }
+
+        function displayHashtags(hashtags, niche) {
+            const grid = document.getElementById('hashtags-grid');
+            const results = document.getElementById('results');
+            const countEl = document.getElementById('result-count');
+
+            grid.innerHTML = '';
+            countEl.textContent = hashtags.length;
+
+            hashtags.forEach((tag, i) => {
+                const el = document.createElement('span');
+                el.className = 'hashtag';
+                el.textContent = '#' + tag;
+                el.style.animationDelay = `${i * 25}ms`;
+                el.title = 'Click to select, or just copy all below';
+                grid.appendChild(el);
+            });
+
+            results.style.display = 'block';
+        }
+
+        // ── Copy ───────────────────────────────────────────────────────────────
+        async function copyHashtags() {
+            if (!lastHashtags.length) return;
+
+            const text = lastHashtags.map(h => '#' + h).join(' ');
+            const btn = document.getElementById('copy-btn');
+            const copyText = document.getElementById('copy-text');
+            const copyIcon = document.getElementById('copy-icon');
+
+            try {
+                await navigator.clipboard.writeText(text);
+                btn.classList.add('copied');
+                copyText.textContent = 'Copied!';
+                copyIcon.textContent = '✅';
+                showToast('Hashtags copied to clipboard!');
+
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    copyText.textContent = 'Copy All';
+                    copyIcon.textContent = '📋';
+                }, 2000);
+            } catch (_) {
+                // Fallback
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                showToast('Hashtags copied!');
+            }
+        }
+
+        // ── Upgrade / Payment ──────────────────────────────────────────────────
+        async function handleUpgrade(plan) {
+            try {
+                const res = await fetch('/api/create-checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ plan })
+                });
+                const data = await res.json();
+
+                if (data.url && data.url !== '#payment-placeholder') {
+                    window.open(data.url, '_blank');
+                } else {
+                    showToast('💳 Payment integration ready — connect Razorpay or Stripe to enable');
+                }
+            } catch (_) {
+                showToast('💳 Payment integration ready — connect Razorpay or Stripe to enable');
+            }
+        }
+
+        // ── Helpers ────────────────────────────────────────────────────────────
+        function fillNiche(niche) {
+            document.getElementById('niche-input').value = niche;
+            document.getElementById('niche-input').focus();
+        }
+
+        function showError(msg) {
+            const el = document.getElementById('error-msg');
+            el.textContent = msg;
+            el.style.display = 'block';
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>

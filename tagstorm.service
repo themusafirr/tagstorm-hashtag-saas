@@ -1,0 +1,15 @@
+[Unit]
+Description=TagStorm AI - Hashtag Generator Flask App
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/var/www/hashtag-tool
+Environment="PATH=/usr/bin/python3"
+ExecStart=/usr/bin/python3 /var/www/hashtag-tool/app.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
