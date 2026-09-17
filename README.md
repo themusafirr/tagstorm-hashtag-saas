@@ -5,6 +5,7 @@
 [![SQLite](https://img.shields.io/badge/SQLite-Database-003B57?style=for-the-badge&logo=sqlite)](https://www.sqlite.org/)
 [![Nginx](https://img.shields.io/badge/Nginx-Reverse_Proxy-009639?style=for-the-badge&logo=nginx)](https://nginx.org/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Try_It_Now-success?style=for-the-badge)](https://pixelssudio.github.io/tagstorm-hashtag-saas/)
 
 > **A turnkey, production-grade Micro-SaaS web application** for social media creators and agencies to generate viral hashtags, analyze competition difficulty, and optimize Instagram & YouTube reach. Ships with a complete frontend application, RESTful backend, SQLite analytics, production Nginx/Systemd configs, and a high-converting sales landing page.
 
@@ -33,7 +34,7 @@
 
 ### 1. Clone & Install Dependencies
 ```bash
-git clone https://github.com/<your-username>/tagstorm-hashtag-saas.git
+git clone https://github.com/pixelssudio/tagstorm-hashtag-saas.git
 cd tagstorm-hashtag-saas
 pip install -r requirements.txt
 ```
@@ -103,4 +104,4 @@ Interested in purchasing this Micro-SaaS codebase outright, or looking for a dev
 ---
 
 ## 📄 License
-MIT License. Created by Pankaj (@the.musafir).
+MIT License. Built by **[the.musafir](https://github.com/pixelssudio)** — Full-Stack AI Engineer.
