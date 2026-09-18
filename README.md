@@ -9,7 +9,15 @@
 
 > **A turnkey, production-grade Micro-SaaS web application** for social media creators and agencies to generate viral hashtags, analyze competition difficulty, and optimize Instagram & YouTube reach. Ships with a complete frontend application, RESTful backend, SQLite analytics, production Nginx/Systemd configs, and a high-converting sales landing page.
 
+
+<div align="center">
+  <br/>
+  <img src="./assets/preview.png" width="100%" alt="Live UI Preview" style="border-radius: 14px; border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6);" />
+  <br/>
+</div>
+
 ---
+
 
 ## 🌟 Features & Highlights
 
